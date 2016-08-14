@@ -1,0 +1,13 @@
+{% import "@ApplicationStock/Macro/macro_stock.html.twig" as macro_stock %}
+
+
+{% block message %}
+    <div class="user-container">
+        {% for vote in votes %}
+            {% set right = '<span class="score">%score%</span>' |replace({'%score%': vote.value}) %}
+            {{ macro_stock.userList(vote.voter, right) }}
+        {% else %}
+            <p class="text-center">{{ 'comment.vote.no_results' |trans }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}

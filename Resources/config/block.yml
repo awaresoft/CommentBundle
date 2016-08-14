@@ -1,0 +1,9 @@
+services:
+    awaresoft.comment.block.recent_comments:
+        class: Awaresoft\CommentBundle\Block\RecentCommentsBlock
+        tags:
+            - { name: sonata.block }
+        arguments:
+            - Recent comments
+            - "@templating"
+            - "@service_container"

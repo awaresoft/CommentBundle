@@ -1,0 +1,50 @@
+menu_threads: Threads
+menu_comments: Comments
+conversation: Conversation
+form_label_body: Your message
+form_label_website: Your website URL
+form_label_email: Your email address
+form_label_note: Your note
+form_label_author_name: Your name
+sonata_comment_admin_edit: Edit
+sonata_comment_admin_view_comments: View comments
+sonata_comment_note_given: "Note given: "
+form:
+    label_id: Identifier
+    label_body: Message
+    label_email: Email address
+    label_website: Website URL
+    label_state: State
+    label_created_at: Creation date
+    label_permalink: Permalink
+    label_is_commentable: Comments enabled
+    label_private: Private
+    label_category: Category
+list:
+    label_id: Identifier
+    label_body: Message
+    label_created_at: Creation date
+    label_permalink: Permalink
+    label_is_commentable: Comments enabled
+    label_private: Private
+    label_average_note: Average note
+    label_note: Note
+    label_state: State
+    label_num_comments: Comments number
+    label_category: Category
+breadcrumb:
+    link_thread_list: Conversation
+    link_comment_list: Comments list
+moderate: Moderate
+invalid: Invalid
+valid: Valid
+label:
+    blocked: Blocked
+    comment: Comment
+helper:
+    blocked: "If you want to hide comment, block it."
+
+comment.admin:
+    menu_comments: Komentarze
+    tabmenu.show_all_threads_comments: Pokaż wszystkie komentarze dla wątku
+    tabmenu.show_thread: Wyświetl wątek na stronie

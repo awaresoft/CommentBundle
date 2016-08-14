@@ -1,0 +1,23 @@
+services:
+    awaresoft.comment.manager.thread:
+        class: Awaresoft\CommentBundle\Manager\ThreadManager
+        arguments:
+            - @sonata.comment.manager.comment
+            - @event_dispatcher
+            - @fos_comment.entity_manager
+            - %fos_comment.model.thread.class%
+
+    awaresoft.comment.manager.comment:
+        class: Awaresoft\CommentBundle\Manager\CommentManager
+        arguments:
+            - @event_dispatcher
+            - @fos_comment.sorting_factory
+            - @fos_comment.entity_manager
+            - %fos_comment.model.comment.class%
+
+    awaresoft.comment.manager.vote:
+        class: Awaresoft\CommentBundle\Manager\VoteManager
+        arguments:
+            - @event_dispatcher
+            - @fos_comment.entity_manager
+            - %fos_comment.model.vote.class%

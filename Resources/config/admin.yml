@@ -1,0 +1,28 @@
+services:
+    sonata.comment.admin.comment:
+        class: Awaresoft\CommentBundle\Admin\CommentAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin.admin.menu_group_content, label: comment.admin.menu_comments, pager_type: simple }
+        arguments:
+            - null
+            - Application\CommentBundle\Entity\Comment
+            - AwaresoftCommentBundle:CommentCRUD
+        calls:
+            - [setModelManager, ["@awaresoft.comment.admin.comment.manager"]]
+
+    sonata.comment.admin.thread:
+        class: Awaresoft\CommentBundle\Admin\ThreadAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin.admin.menu_group_content, label: comment.admin.menu_threads, pager_type: simple }
+        arguments:
+            - null
+            - Application\CommentBundle\Entity\Thread
+            - SonataAdminBundle:CRUD
+        calls:
+            - [addChild, ["@sonata.comment.admin.comment"]]
+
+    awaresoft.comment.admin.comment.manager:
+        class: Awaresoft\CommentBundle\Admin\Manager\AdminCommentManager
+        arguments:
+            - "@doctrine"
+            - "@awaresoft.comment.manager.comment"
