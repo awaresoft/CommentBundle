@@ -228,11 +228,14 @@ class CommentController extends Controller
 
         $voteManager = $this->get('awaresoft.comment.manager.vote');
         $votes = $voteManager->getRepository()->findByComment($comment);
+        $message = $this->renderView('AwaresoftCommentBundle:Comment:votes.html.twig', [
+            'votes' => $votes,
+        ]);
 
-        return new JsonResponse([
-            'html' => $this->renderView('AwaresoftCommentBundle:Comment:votes.html.twig', [
-                'votes' => $votes,
-            ]),
-        ], 200);
+        return $this->forward('ApplicationMainBundle:Ajax:popup', [
+            'id' => $request->get('id'),
+            'type' => $request->get('type'),
+            'requestQueryParameters' => array_merge($request->query->all(), ['message' => $message]),
+        ]);
     }
 }
