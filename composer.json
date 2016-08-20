@@ -1,5 +1,5 @@
 {
-    "name": "awaresoft/CommentBundle",
+    "name": "awaresoft/comment-bundle",
     "type": "symfony-bundle",
     "description": "Symfony Awaresoft CommentBundle with Sonata libraries",
     "require": {
