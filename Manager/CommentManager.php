@@ -107,7 +107,7 @@ class CommentManager extends BaseCommentManager
      *
      * @return Comment[]
      */
-    public function findComments(User $user = null, $criteria = [], $limit = self::DEFAULT_LIMIT, $offset = 0, array $orderBy = ['c.createdAt' => 'DESC'], $depth = null, $withPrivate = true, $withDeleted = false, $unique = true)
+    public function findComments(User $user = null, $criteria = [], $limit = self::DEFAULT_LIMIT, $offset = 0, array $orderBy = ['c.createdAt' => 'DESC'], $depth = null, $withPrivate = true, $withDeleted = false)
     {
         $qb = $this->repository->createQueryBuilder('c')
             ->select('c, t.permalink, u.username')
