@@ -17,9 +17,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class ThreadController extends Controller
 {
-
     /**
-     * @Route("/thread/get", options={"expose"=true})
+     * @Route("/thread/get", name="awaresoft_comment_thread_get", options={"expose"=true})
      *
      * @param Request $request
      *
@@ -41,7 +40,7 @@ class ThreadController extends Controller
 
         $threadManager = $this->get('awaresoft.comment.manager.thread');
         $commentManager = $this->get('awaresoft.comment.manager.comment');
-        $isModerator = $this->isGranted('ROLE_STOCK_MODERATOR');
+        $isModerator = $this->isGranted('ROLE_COMMENT_MODERATOR');
 
         $thread = $threadManager->findThreadById($request->get('threadId'));
 
@@ -71,7 +70,7 @@ class ThreadController extends Controller
     }
 
     /**
-     * @Route("/thread/getbyowner", options={"expose"=true})
+     * @Route("/thread/getbyowner", name="awaresoft_comment_thread_getbyowner", options={"expose"=true})
      *
      * @param Request $request
      *
@@ -122,7 +121,7 @@ class ThreadController extends Controller
     }
 
     /**
-     * @Route("/thread/getbyauthor", options={"expose"=true})
+     * @Route("/thread/getbyauthor", name="awaresoft_comment_thread_getbyauthor", options={"expose"=true})
      *
      * @param Request $request
      *

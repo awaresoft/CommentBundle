@@ -46,5 +46,7 @@ helper:
 
 comment.admin:
     menu_comments: Komentarze
+    menu_abuses: Nadużycia
+    tabmenu_abuses: Nadużycia (komentarze)
     tabmenu.show_all_threads_comments: Pokaż wszystkie komentarze dla wątku
     tabmenu.show_thread: Wyświetl wątek na stronie

@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class CommentController extends Controller
 {
     /**
-     * @Route("/comment/vote/{id}/{action}", options={"expose"=true})
+     * @Route("/comment/vote/{id}/{action}", name="awaresoft_comment_comment_vote", options={"expose"=true})
      *
      * @param Request $request
      * @param Comment $comment
@@ -69,7 +69,7 @@ class CommentController extends Controller
     }
 
     /**
-     * @Route("/comment/abuse/{id}", options={"expose"=true})
+     * @Route("/comment/abuse/{id}", name="awaresoft_comment_comment_abuse", options={"expose"=true})
      *
      * @param Request $request
      * @param Comment $comment
@@ -112,7 +112,7 @@ class CommentController extends Controller
     }
 
     /**
-     * @Route("/comment/remove/{id}", options={"expose"=true})
+     * @Route("/comment/remove/{id}", name="awaresoft_comment_comment_remove", options={"expose"=true})
      *
      * @param Request $request
      * @param Comment $comment
@@ -133,7 +133,7 @@ class CommentController extends Controller
             throw new HttpException(Response::HTTP_UNAUTHORIZED);
         }
 
-        if (($comment->getAuthor() !== $user) && !$this->isGranted('ROLE_STOCK_MODERATOR')) {
+        if (($comment->getAuthor() !== $user) && !$this->isGranted('ROLE_COMMENT_MODERATOR')) {
             throw new HttpException(Response::HTTP_UNAUTHORIZED);
         }
 
@@ -158,7 +158,54 @@ class CommentController extends Controller
     }
 
     /**
-     * @Route("/comment/remove-many/{ids}", options={"expose"=true})
+     * @Route("/comment/edit/{id}/{body}", name="awaresoft_comment_comment_edit", options={"expose"=true})
+     *
+     * @param Request $request
+     * @param Comment $comment
+     * @param $body
+     *
+     * @return JsonResponse
+     */
+    public function editAction(Request $request, Comment $comment, $body)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw new HttpException(Response::HTTP_FORBIDDEN);
+        }
+
+        $user = $this->getUser();
+        $translator = $this->get('translator');
+        $commentManager = $this->get('awaresoft.comment.manager.comment');
+
+        if (!$user instanceof User) {
+            throw new HttpException(Response::HTTP_UNAUTHORIZED);
+        }
+
+        if (($comment->getAuthor() !== $user) && !$this->isGranted('ROLE_COMMENT_MODERATOR')) {
+            throw new HttpException(Response::HTTP_UNAUTHORIZED);
+        }
+
+        $oldComment = clone $comment;
+        $commentId = $comment->getId();
+        $comment->setBody(urldecode($body));
+
+        try {
+            $commentManager->updateComment($comment, $oldComment);
+        } catch (\Exception $ex) {
+            return new JsonResponse([
+                'message' => $translator->trans('comment.edit.failed'),
+                'commentId' => $commentId,
+            ], 400);
+        }
+
+        return new JsonResponse([
+            'message' => $translator->trans('comment.edit.success'),
+            'body' => '',
+            'commentId' => $commentId,
+        ], 200);
+    }
+
+    /**
+     * @Route("/comment/remove-many/{ids}", name="awaresoft_comment_comment_removemany", options={"expose"=true})
      *
      * @param Request $request
      * @param array $ids
@@ -189,7 +236,7 @@ class CommentController extends Controller
                 continue;
             }
 
-            if (($comments[$key]->getAuthor() !== $user) && !$this->isGranted('ROLE_STOCK_MODERATOR')) {
+            if (($comments[$key]->getAuthor() !== $user) && !$this->isGranted('ROLE_COMMENT_MODERATOR')) {
                 throw new HttpException(Response::HTTP_UNAUTHORIZED);
             }
         }
@@ -213,7 +260,7 @@ class CommentController extends Controller
     }
 
     /**
-     * @Route("/comment/show-voters/{id}", options={"expose"=true})
+     * @Route("/comment/show-voters/{id}", name="awaresoft_comment_comment_showvotes", options={"expose"=true})
      *
      * @param Request $request
      * @param Comment $comment
@@ -236,6 +283,25 @@ class CommentController extends Controller
             'id' => $request->get('id'),
             'type' => $request->get('type'),
             'requestQueryParameters' => array_merge($request->query->all(), ['message' => $message]),
+        ]);
+    }
+
+    /**
+     * @Route("/comment/get/{id}", name="awaresoft_comment_comment_get", options={"expose"=true})
+     *
+     * @param Request $request
+     * @param Comment $comment
+     *
+     * @return JsonResponse
+     */
+    public function getAction(Request $request, Comment $comment)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw new HttpException(Response::HTTP_FORBIDDEN);
+        }
+
+        return new JsonResponse([
+            'body' => $comment->getBody(),
         ]);
     }
 }

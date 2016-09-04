@@ -21,6 +21,15 @@ services:
         calls:
             - [addChild, ["@sonata.comment.admin.comment"]]
 
+    awaresoft.comment.admin.abuse:
+        class: Awaresoft\CommentBundle\Admin\AbuseAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin.admin.menu_group_content, label: comment.admin.menu_abuses }
+        arguments:
+            - null
+            - Application\CommentBundle\Entity\Abuse
+            - SonataAdminBundle:CRUD
+
     awaresoft.comment.admin.comment.manager:
         class: Awaresoft\CommentBundle\Admin\Manager\AdminCommentManager
         arguments:

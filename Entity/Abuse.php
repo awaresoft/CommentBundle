@@ -40,6 +40,13 @@ class Abuse
     protected $comment;
 
     /**
+     * @ORM\Column(type="boolean")
+     *
+     * @var boolean
+     */
+    protected $solved;
+
+    /**
      * @ORM\Column(type="datetime")
      *
      * @Gedmo\Timestampable(on="create")
@@ -58,11 +65,19 @@ class Abuse
     protected $updatedAt;
 
     /**
+     * Abuse constructor.
+     */
+    public function __construct()
+    {
+        $this->solved = false;
+    }
+
+    /**
      * Get id
      *
      * @return integer $id
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
@@ -80,7 +95,7 @@ class Abuse
      *
      * @return Abuse
      */
-    public function setDeclarant($declarant)
+    public function setDeclarant(UserInterface $declarant): Abuse
     {
         $this->declarant = $declarant;
 
@@ -88,7 +103,7 @@ class Abuse
     }
 
     /**
-     * @return Thread
+     * @return Comment
      */
     public function getComment()
     {
@@ -96,11 +111,11 @@ class Abuse
     }
 
     /**
-     * @param Thread $comment
+     * @param Comment $comment
      *
      * @return Abuse
      */
-    public function setComment($comment)
+    public function setComment(Comment $comment): Abuse
     {
         $this->comment = $comment;
 
@@ -108,9 +123,29 @@ class Abuse
     }
 
     /**
+     * @return boolean
+     */
+    public function isSolved(): bool
+    {
+        return $this->solved;
+    }
+
+    /**
+     * @param boolean $solved
+     *
+     * @return Abuse
+     */
+    public function setSolved(bool $solved): Abuse
+    {
+        $this->solved = $solved;
+
+        return $this;
+    }
+
+    /**
      * @return \DateTime
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
@@ -120,7 +155,7 @@ class Abuse
      *
      * @return Abuse
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt = null): Abuse
     {
         $this->createdAt = $createdAt;
 
@@ -130,7 +165,7 @@ class Abuse
     /**
      * @return \DateTime
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
     }
@@ -140,10 +175,18 @@ class Abuse
      *
      * @return Abuse
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt = null): Abuse
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function __toString()
+    {
+        return (string) $this->id;
     }
 }

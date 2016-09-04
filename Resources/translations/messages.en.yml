@@ -46,5 +46,7 @@ helper:
 
 comment.admin:
     menu_comments: Comments
+    menu_abuses: Abuses
+    tabmenu_abuses: Abuses (comments)
     tabmenu.show_all_threads_comments: Show all thread's comments
     tabmenu.show_thread: Show thread
