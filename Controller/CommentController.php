@@ -186,7 +186,15 @@ class CommentController extends Controller
 
         $oldComment = clone $comment;
         $commentId = $comment->getId();
-        $comment->setBody(urldecode($body));
+
+        if ($this->isGranted('ROLE_COMMENT_MODERATOR')) {
+            $comment->setState(Comment::STATUS_MODERATE);
+            $comment->setAnswer(urldecode($body));
+            $output = $comment->getAnswer();
+        } else {
+            $comment->setBody(urldecode($body));
+            $output = $comment->getBody();
+        }
 
         try {
             $commentManager->updateComment($comment, $oldComment);
@@ -199,7 +207,7 @@ class CommentController extends Controller
 
         return new JsonResponse([
             'message' => $translator->trans('comment.edit.success'),
-            'body' => '',
+            'body' => $output,
             'commentId' => $commentId,
         ], 200);
     }
