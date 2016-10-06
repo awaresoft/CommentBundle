@@ -6,6 +6,7 @@ use Awaresoft\CommentBundle\Entity\Comment;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -27,5 +28,26 @@ class VoteRepository extends EntityRepository
         return $this->findBy([
             'comment' => $comment,
         ]);
+    }
+
+    /**
+     * Return count of votes by user per day
+     *
+     * @param UserInterface $user
+     *
+     * @return int
+     */
+    public function countDailyVotesByUser(UserInterface $user)
+    {
+        $dateNow = new \DateTime();
+
+        return $this->createQueryBuilder('v')
+            ->select('COUNT(v.id)')
+            ->where('v.voter = :voter')
+            ->andWhere('DATE(v.createdAt) = :date')
+            ->setParameter('voter', $user)
+            ->setParameter('date', $dateNow->format('Y-m-d'))
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

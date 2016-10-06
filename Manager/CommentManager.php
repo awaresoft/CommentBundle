@@ -125,6 +125,16 @@ class CommentManager extends BaseCommentManager
 
             $qb->addSelect('(' . $qb2 . ') AS value')
                 ->setParameter('voter', $user);
+
+            $qb3 = $this->em->createQueryBuilder()
+                ->select('ub.id')
+                ->from('ApplicationUserBundle:User', 'ub')
+                ->where('ub = :voter')
+                ->andWhere('c.author MEMBER OF ub.usersBlockedMe OR c.author MEMBER OF ub.blockedUsers')
+                ->getDQL();
+
+            $qb->addSelect('(' . $qb3 . ') AS blocked')
+                ->setParameter('voter', $user);
         }
 
         if (!$withDeleted) {
